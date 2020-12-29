@@ -1,15 +1,19 @@
-import express, { Router } from 'express';
+import express from 'express';
 import passport from 'passport'
 import {
-    createUser
+    findUserDetails,
+    assignRefreshTokenToUser,
+    removeRefreshTokenFromUser,
+    removeAllRefreshTokensFromUser,
+    updateRefreshTokenForUser
 } from './authController.js';
 
 const authRouter = express.Router();
 
-// authRouter.get('/authenticate', passport.authenticate('jwt', { session: false }));
-authRouter.post('/login');
-authRouter.delete('/logout');
-authRouter.delete('/force_logout');
-authRouter.put('/refresh_jwt');
+authRouter.get('/login', findUserDetails, assignRefreshTokenToUser);
+authRouter.put('/jwt', passport.authenticate('jwt', {session: false}))
+authRouter.delete('/logout', removeRefreshTokenFromUser);
+authRouter.delete('/force_logout', removeAllRefreshTokensFromUser);
+authRouter.put('/refresh_jwt', updateRefreshTokenForUser);
 
 export { authRouter };

@@ -6,13 +6,12 @@ const createUser = async (req, res, next) => {
     reqBody.password = bcryptjs.hashSync(reqBody.password);
     
     try {
-        const newUser = new User(reqBody);
-        await newUser.save();
-    } catch {
-        res.status(422).json({message: 'duplicate email'});
+        const newUser = await User.create(reqBody);
+    } catch (error) {
+        res.status(422).json({message: 'duplicate email', error: error});
     }    
 
-    res.json({message: `User ${reqBody.name} created`})
+    res.json({message: `User ${reqBody.email} created`})
 }
 
 export { createUser }

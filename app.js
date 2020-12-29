@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
 import { config as dotenvConfig } from 'dotenv';
-import { connectDB } from './config/connectDB.js'
+import { connectToDatabase } from './config/databaseConfig.js'
 import { passportConfig } from './config/passportConfig.js'
 import { indexRouter } from './api/index.js';
 import { authRouter } from './api/auth/authRouter.js';
@@ -17,8 +17,8 @@ app.use(cors());
 app.use(morgan(process.env.NODE_ENV));
 app.use(passport.initialize());
 
-// Connect to MongoDB
-connectDB();
+// Connect to HerculesDB
+const herculesDB = connectToDatabase();
 
 // Configure passport
 passport.use(passportConfig);
@@ -27,7 +27,6 @@ passport.use(passportConfig);
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
-
 
 app.listen(
   process.env.PORT || 5000,

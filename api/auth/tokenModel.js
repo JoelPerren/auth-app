@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize';
+import { User } from '../user/userModel.js';
 
-class User extends Sequelize.Model {
+class Token extends Sequelize.Model {
     static init(database) {
         return super.init({
             id: {
@@ -8,28 +9,28 @@ class User extends Sequelize.Model {
               primaryKey: true,
               autoIncrement: true
             },
-            firstName: {
+            userRef: {
+              type: Sequelize.DataTypes.INTEGER,
+              allowNull: false,
+              references: {
+                  model: User,
+                  key: 'id'
+              }
+            },
+            token: {
               type: Sequelize.DataTypes.STRING,
               allowNull: false
             },
-            lastName: {
-              type: Sequelize.DataTypes.STRING,
-              allowNull: false
-            },
-            email: {
-              type: Sequelize.DataTypes.STRING,
-              allowNull: false
-            },
-            password: {
-              type: Sequelize.DataTypes.STRING,
+            expiresAt: {
+              type: Sequelize.DataTypes.DATE,
               allowNull: false
             }
           }, {
               sequelize: database,
-              tableName: 'user',
+              tableName: 'token',
               underscored: true
           });
     }
 }
 
-export { User }
+export { Token }
